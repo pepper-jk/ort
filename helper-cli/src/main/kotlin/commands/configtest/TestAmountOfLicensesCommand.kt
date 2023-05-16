@@ -25,6 +25,7 @@ import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
+
 import org.ossreviewtoolkit.helper.commands.groupByText
 import org.ossreviewtoolkit.helper.utils.*
 import org.ossreviewtoolkit.helper.utils.fetchScannedSources
@@ -37,7 +38,6 @@ import org.ossreviewtoolkit.model.licenses.LicenseView
 import org.ossreviewtoolkit.model.utils.DirectoryPackageConfigurationProvider
 import org.ossreviewtoolkit.model.utils.createLicenseInfoResolver
 import org.ossreviewtoolkit.utils.common.FileMatcher
-
 import org.ossreviewtoolkit.utils.common.expandTilde
 
 class TestAmountOfLicensesCommand : CliktCommand(
