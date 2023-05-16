@@ -61,8 +61,8 @@ class TestAmountOfLicensesCommand : CliktCommand(
 
     // TODO: Add params for ort-config
 
-    fun getLicenses(OrtFile: String) {
-        val ortResult = readOrtResult(OrtFile)
+    fun getLicenses(ortFile: String) {
+        val ortResult = readOrtResult(ortFile)
 
         val licenseInfoResolver = ortResult.createLicenseInfoResolver()
 
