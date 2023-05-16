@@ -143,8 +143,8 @@ class TestAmountOfLicensesCommand : CliktCommand(
         val contrastFindings = getLicenses(contrastOrtFile)
 
         if (findings != contrastFindings) {
-            return 1;
+            return 1
         }
-        return 0;
+        return 0
     }
 }
