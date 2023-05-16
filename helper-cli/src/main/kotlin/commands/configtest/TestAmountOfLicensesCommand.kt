@@ -105,8 +105,8 @@ class TestAmountOfLicensesCommand : CliktCommand(
 
             val violatedRulesByLicense = ortResult.getViolatedRulesByLicense(packageId, offendingSeverities)
 
-            findingsByProvenance.putAll( ortResult
-                .getLicenseFindingsById(
+            findingsByProvenance.putAll(
+                ortResult.getLicenseFindingsById(
                     packageId,
                     packageConfigurationProvider,
                     applyLicenseFindingCurations,
