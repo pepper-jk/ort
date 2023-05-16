@@ -61,8 +61,8 @@ class TestAmountOfLicensesCommand : CliktCommand(
 
     // TODO: Add params for ort-config
 
-    override fun run() {
-        val ortResult = readOrtResult(inputOrtFile)
+    fun getLicenses(OrtFile: String) {
+        val ortResult = readOrtResult(OrtFile)
 
         val licenseInfoResolver = ortResult.createLicenseInfoResolver()
 
@@ -83,55 +83,66 @@ class TestAmountOfLicensesCommand : CliktCommand(
             !offendingOnly || id in packagesWithOffendingRuleViolations
         }.sortedBy { it }
 
-        if (ortResult.getPackageOrProject(packageId) == null) {
-            throw UsageError("Could not find the package for the given id '${packageId.toCoordinates()}'.")
-        }
-
-        val sourcesDir = sourceCodeDir ?: run {
-            println("Downloading sources for package '${packageId.toCoordinates()}'...")
-            ortResult.fetchScannedSources(packageId)
-        }
-
-        val packageConfigurationProvider = DirectoryPackageConfigurationProvider(packageConfigurationDir)
-
-        fun isPathExcluded(provenance: Provenance, path: String): Boolean =
-            if (ortResult.isProject(packageId)) {
-                ortResult.getExcludes().paths
-            } else {
-                packageConfigurationProvider.getPackageConfigurations(packageId, provenance).flatMap { it.pathExcludes }
-            }.any { it.matches(path) }
-
-        val violatedRulesByLicense = ortResult.getViolatedRulesByLicense(packageId, offendingSeverities)
-
-        val findingsByProvenance = ortResult
-            .getLicenseFindingsById(
-                packageId,
-                packageConfigurationProvider,
-                applyLicenseFindingCurations,
-                decomposeLicenseExpressions
-            )
-            .mapValues { (provenance, locationsByLicense) ->
-                locationsByLicense.filter { (license, _) ->
-                    !offendingOnly || license.decompose().any { it in violatedRulesByLicense }
-                }.mapValues { (license, locations) ->
-                    locations.filter { location ->
-                        val isAllowedFile = fileAllowList.isEmpty() || FileMatcher.match(fileAllowList, location.path)
-
-                        val isIncluded = !omitExcluded || !isPathExcluded(provenance, location.path) ||
-                                ignoreExcludedRuleIds.intersect(violatedRulesByLicense[license].orEmpty()).isNotEmpty()
-
-                        isAllowedFile && isIncluded
-                    }
-                }.mapValues { (_, locations) ->
-                    locations.groupByText(sourcesDir)
-                }.filter { (_, locations) ->
-                    locations.isNotEmpty()
-                }.filter { (license, _) ->
-                    licenseAllowlist.isEmpty() || license.decompose().any { it.simpleLicense() in licenseAllowlist }
-                }
+        for (packageId in packages) {
+            if (ortResult.getPackageOrProject(packageId) == null) {
+                throw UsageError("Could not find the package for the given id '${packageId.toCoordinates()}'.")
             }
 
-        if (findingsByProvenance != otherFindingsByProvenance) {
+            val sourcesDir = sourceCodeDir ?: run {
+                println("Downloading sources for package '${packageId.toCoordinates()}'...")
+                ortResult.fetchScannedSources(packageId)
+            }
+
+            val packageConfigurationProvider = DirectoryPackageConfigurationProvider(packageConfigurationDir)
+
+            fun isPathExcluded(provenance: Provenance, path: String): Boolean =
+                if (ortResult.isProject(packageId)) {
+                    ortResult.getExcludes().paths
+                } else {
+                    packageConfigurationProvider.getPackageConfigurations(packageId, provenance).flatMap { it.pathExcludes }
+                }.any { it.matches(path) }
+
+            val violatedRulesByLicense = ortResult.getViolatedRulesByLicense(packageId, offendingSeverities)
+
+            // FIXME: needs to append to prior findings not override them
+            val findingsByProvenance = ortResult
+                .getLicenseFindingsById(
+                    packageId,
+                    packageConfigurationProvider,
+                    applyLicenseFindingCurations,
+                    decomposeLicenseExpressions
+                )
+                .mapValues { (provenance, locationsByLicense) ->
+                    locationsByLicense.filter { (license, _) ->
+                        !offendingOnly || license.decompose().any { it in violatedRulesByLicense }
+                    }.mapValues { (license, locations) ->
+                        locations.filter { location ->
+                            val isAllowedFile = fileAllowList.isEmpty() || FileMatcher.match(fileAllowList, location.path)
+
+                            val isIncluded = !omitExcluded || !isPathExcluded(provenance, location.path) ||
+                                    ignoreExcludedRuleIds.intersect(violatedRulesByLicense[license].orEmpty()).isNotEmpty()
+
+                            isAllowedFile && isIncluded
+                        }
+                    }.mapValues { (_, locations) ->
+                        locations.groupByText(sourcesDir)
+                    }.filter { (_, locations) ->
+                        locations.isNotEmpty()
+                    }.filter { (license, _) ->
+                        licenseAllowlist.isEmpty() || license.decompose().any { it.simpleLicense() in licenseAllowlist }
+                    }
+                }
+        }
+
+        return findingsByProvenance
+    }
+
+    override fun run() {
+
+        val findings = getLicenses(inputOrtFile)
+        val contrastFindings = getLicenses(contrastOrtFile)
+
+        if (findings != contrastFindings) {
             return 1;
         }
         return 0;
