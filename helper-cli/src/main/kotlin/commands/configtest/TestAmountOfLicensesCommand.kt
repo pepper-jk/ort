@@ -139,7 +139,6 @@ class TestAmountOfLicensesCommand : CliktCommand(
     }
 
     override fun run() {
-
         val findings = getLicenses(inputOrtFile)
         val contrastFindings = getLicenses(contrastOrtFile)
 
