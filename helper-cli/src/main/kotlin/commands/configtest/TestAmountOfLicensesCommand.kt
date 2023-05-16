@@ -41,7 +41,7 @@ import org.ossreviewtoolkit.utils.common.FileMatcher
 import org.ossreviewtoolkit.utils.common.expandTilde
 
 class TestAmountOfLicensesCommand : CliktCommand(
-    help = "Converts the given ORT file to a different format, e.g. '.json' to '.yml'."
+    help = "Takes two ORT files and compares their number of license findings."
 ) {
     private val inputOrtFile by option(
         "--input-ort-file", "-i",
