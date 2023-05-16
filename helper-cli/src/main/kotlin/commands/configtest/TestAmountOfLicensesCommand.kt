@@ -83,6 +83,7 @@ class TestAmountOfLicensesCommand : CliktCommand(
             !offendingOnly || id in packagesWithOffendingRuleViolations
         }.sortedBy { it }
 
+        val findingsByProvenance = mutableMapOf<Provenance, MutableMap<SpdxExpression, MutableSet<TextLocation>>>()
         for (packageId in packages) {
             if (ortResult.getPackageOrProject(packageId) == null) {
                 throw UsageError("Could not find the package for the given id '${packageId.toCoordinates()}'.")
@@ -104,8 +105,7 @@ class TestAmountOfLicensesCommand : CliktCommand(
 
             val violatedRulesByLicense = ortResult.getViolatedRulesByLicense(packageId, offendingSeverities)
 
-            // FIXME: needs to append to prior findings not override them
-            val findingsByProvenance = ortResult
+            findingsByProvenance.putAll( ortResult
                 .getLicenseFindingsById(
                     packageId,
                     packageConfigurationProvider,
@@ -132,6 +132,7 @@ class TestAmountOfLicensesCommand : CliktCommand(
                         licenseAllowlist.isEmpty() || license.decompose().any { it.simpleLicense() in licenseAllowlist }
                     }
                 }
+            )
         }
 
         return findingsByProvenance
