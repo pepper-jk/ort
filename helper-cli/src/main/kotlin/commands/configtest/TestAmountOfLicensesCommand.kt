@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.helper.commands.configtest
 
+import java.io.File
+
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.UsageError
 import com.github.ajalt.clikt.parameters.options.convert
@@ -63,7 +65,7 @@ class TestAmountOfLicensesCommand : CliktCommand(
 
     // TODO: Add params for ort-config
 
-    fun getLicenses(ortFile: String) {
+    private fun getLicenses(ortFile: File): MutableMap<Provenance, Map<SpdxExpression, Set<TextLocation>>> {
         val ortResult = readOrtResult(ortFile)
 
         val licenseInfoResolver = ortResult.createLicenseInfoResolver()
