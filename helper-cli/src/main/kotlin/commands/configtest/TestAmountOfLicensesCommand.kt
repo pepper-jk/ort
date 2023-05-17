@@ -61,29 +61,30 @@ class TestAmountOfLicensesCommand : CliktCommand(
         .convert { it.absoluteFile.normalize() }
         .required()
 
+    private val applyLicenseFindingCurations by option(
+        "--apply-license-finding-curations",
+        help = "Apply the license finding curations contained in the ORT result."
+    ).flag()
+
+    private val decomposeLicenseExpressions by option(
+        "--decompose-license-expressions",
+        help = "Decompose SPDX license expressions into its single licenses components and list the findings for " +
+                "each single license separately."
+    ).flag()
+
+    private val packageConfigurationDir by option(
+        "--package-configuration-dir",
+        help = "The directory containing the package configuration files to read as input. It is searched " +
+                "recursively."
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
+
     // TODO: Add params for ort-config
 
     private fun getLicenses(ortFile: File): MutableMap<Provenance, Map<SpdxExpression, Set<TextLocation>>> {
         val ortResult = readOrtResult(ortFile)
 
-        val licenseInfoResolver = ortResult.createLicenseInfoResolver()
-
-        fun getDetectedLicenses(id: Identifier): List<String> =
-            licenseInfoResolver.resolveLicenseInfo(id)
-                .filter(LicenseView.ONLY_DETECTED)
-                .map { it.license.toString() }
-
-        val packagesWithOffendingRuleViolations = ortResult.getRuleViolations().filter {
-            it.severity in offendingSeverities
-        }.mapNotNullTo(mutableSetOf()) { it.pkg }
-
-        val packages = ortResult.getProjectsAndPackages().filter { id ->
-            (ortResult.isPackage(id) && PackageType.PACKAGE in type) || (ortResult.isProject(id) && PackageType.PROJECT in type)
-        }.filter { id ->
-            matchDetectedLicenses.isEmpty() || (matchDetectedLicenses - getDetectedLicenses(id)).isEmpty()
-        }.filter { id ->
-            !offendingOnly || id in packagesWithOffendingRuleViolations
-        }.sortedBy { it }
+        val packages = ortResult.getProjectsAndPackages()
 
         val findingsByProvenance = mutableMapOf<Provenance, Map<SpdxExpression, Set<TextLocation>>>()
         for (packageId in packages) {
@@ -91,21 +92,7 @@ class TestAmountOfLicensesCommand : CliktCommand(
                 throw UsageError("Could not find the package for the given id '${packageId.toCoordinates()}'.")
             }
 
-            val sourcesDir = sourceCodeDir ?: run {
-                println("Downloading sources for package '${packageId.toCoordinates()}'...")
-                ortResult.fetchScannedSources(packageId)
-            }
-
             val packageConfigurationProvider = DirectoryPackageConfigurationProvider(packageConfigurationDir)
-
-            fun isPathExcluded(provenance: Provenance, path: String): Boolean =
-                if (ortResult.isProject(packageId)) {
-                    ortResult.getExcludes().paths
-                } else {
-                    packageConfigurationProvider.getPackageConfigurations(packageId, provenance).flatMap { it.pathExcludes }
-                }.any { it.matches(path) }
-
-            val violatedRulesByLicense = ortResult.getViolatedRulesByLicense(packageId, offendingSeverities)
 
             findingsByProvenance.putAll(
                 ortResult.getLicenseFindingsById(
