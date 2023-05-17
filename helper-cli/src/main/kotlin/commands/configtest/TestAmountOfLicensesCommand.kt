@@ -112,26 +112,6 @@ class TestAmountOfLicensesCommand : CliktCommand(
                     applyLicenseFindingCurations,
                     decomposeLicenseExpressions
                 )
-                .mapValues { (provenance, locationsByLicense) ->
-                    locationsByLicense.filter { (license, _) ->
-                        !offendingOnly || license.decompose().any { it in violatedRulesByLicense }
-                    }.mapValues { (license, locations) ->
-                        locations.filter { location ->
-                            val isAllowedFile = fileAllowList.isEmpty() || FileMatcher.match(fileAllowList, location.path)
-
-                            val isIncluded = !omitExcluded || !isPathExcluded(provenance, location.path) ||
-                                    ignoreExcludedRuleIds.intersect(violatedRulesByLicense[license].orEmpty()).isNotEmpty()
-
-                            isAllowedFile && isIncluded
-                        }
-                    }.mapValues { (_, locations) ->
-                        locations.groupByText(sourcesDir)
-                    }.filter { (_, locations) ->
-                        locations.isNotEmpty()
-                    }.filter { (license, _) ->
-                        licenseAllowlist.isEmpty() || license.decompose().any { it.simpleLicense() in licenseAllowlist }
-                    }
-                }
             )
         }
 
