@@ -34,11 +34,13 @@ import org.ossreviewtoolkit.helper.utils.readOrtResult
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.PackageType
 import org.ossreviewtoolkit.model.Provenance
+import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.licenses.LicenseView
 import org.ossreviewtoolkit.model.utils.DirectoryPackageConfigurationProvider
 import org.ossreviewtoolkit.model.utils.createLicenseInfoResolver
 import org.ossreviewtoolkit.utils.common.FileMatcher
 import org.ossreviewtoolkit.utils.common.expandTilde
+import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 
 class TestAmountOfLicensesCommand : CliktCommand(
     help = "Takes two ORT files and compares their number of license findings."
@@ -83,7 +85,7 @@ class TestAmountOfLicensesCommand : CliktCommand(
             !offendingOnly || id in packagesWithOffendingRuleViolations
         }.sortedBy { it }
 
-        val findingsByProvenance = mutableMapOf<Provenance, MutableMap<SpdxExpression, MutableSet<TextLocation>>>()
+        val findingsByProvenance = mutableMapOf<Provenance, Map<SpdxExpression, Set<TextLocation>>>()
         for (packageId in packages) {
             if (ortResult.getPackageOrProject(packageId) == null) {
                 throw UsageError("Could not find the package for the given id '${packageId.toCoordinates()}'.")
