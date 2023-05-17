@@ -124,11 +124,12 @@ class TestAmountOfLicensesCommand : CliktCommand(
         val findings = getLicenses(inputOrtFile)
         val contrastFindings = getLicenses(contrastOrtFile)
 
-        if (findings != contrastFindings)
+        if (findings != contrastFindings) {
             // FIXME: not really a usage error more a failed test, replace later
             throw UsageError(
                 text = "Findings are not identical.",
                 statusCode = 1
             )
+        }
     }
 }
