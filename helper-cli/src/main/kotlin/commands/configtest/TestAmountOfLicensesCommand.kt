@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.helper.commands.configtest
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.UsageError
 import com.github.ajalt.clikt.parameters.options.convert
+import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
@@ -31,6 +32,7 @@ import java.io.File
 import org.ossreviewtoolkit.helper.utils.*
 import org.ossreviewtoolkit.helper.utils.fetchScannedSources
 import org.ossreviewtoolkit.helper.utils.getViolatedRulesByLicense
+import org.ossreviewtoolkit.helper.utils.getLicenseFindingsById
 import org.ossreviewtoolkit.helper.utils.readOrtResult
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.PackageType
