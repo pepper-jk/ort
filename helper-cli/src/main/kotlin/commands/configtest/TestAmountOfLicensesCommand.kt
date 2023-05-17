@@ -29,18 +29,11 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import java.io.File
 
-import org.ossreviewtoolkit.helper.utils.*
-import org.ossreviewtoolkit.helper.utils.fetchScannedSources
-import org.ossreviewtoolkit.helper.utils.getViolatedRulesByLicense
 import org.ossreviewtoolkit.helper.utils.getLicenseFindingsById
 import org.ossreviewtoolkit.helper.utils.readOrtResult
-import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.PackageType
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.TextLocation
-import org.ossreviewtoolkit.model.licenses.LicenseView
 import org.ossreviewtoolkit.model.utils.DirectoryPackageConfigurationProvider
-import org.ossreviewtoolkit.model.utils.createLicenseInfoResolver
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 
