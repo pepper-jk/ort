@@ -37,7 +37,7 @@ import org.ossreviewtoolkit.model.utils.DirectoryPackageConfigurationProvider
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 
-class TestAmountOfLicensesCommand : CliktCommand(
+class TestLicensesCommand : CliktCommand(
     help = "Takes two ORT files and compares their number of license findings."
 ) {
     private val inputOrtFile by option(
