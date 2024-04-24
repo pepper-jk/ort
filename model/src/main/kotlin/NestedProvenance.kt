@@ -28,20 +28,31 @@ data class NestedProvenance(
     /**
      * The root provenance that contains the [nested provenances][subRepositories].
      */
-    val root: KnownProvenance,
+    val root: Provenance,
 
     /**
      * If [root] is a [RepositoryProvenance] this map contains all paths which contain nested repositories associated
      * with the [RepositoryProvenance] of the nested repository. If [root] is an [ArtifactProvenance] this map is always
      * empty.
      */
-    val subRepositories: Map<String, RepositoryProvenance>
+    val subRepositories: Map<String, Provenance>
 ) {
+    companion object {
+        /**
+         * A constant for a [NestedProvenance] where all properties are empty strings.
+         */
+        @JvmField
+        val EMPTY = NestedProvenance(
+            root = UnknownProvenance,
+            subRepositories = emptyMap()
+        )
+    }
+
     /**
-     * The set of all contained [KnownProvenance]s.
+     * The set of all contained [Provenance]s.
      */
     @JsonIgnore
-    val allProvenances: Set<KnownProvenance> =
+    val allProvenances: Set<Provenance> =
         buildSet {
             add(root)
             addAll(subRepositories.values)
@@ -51,7 +62,7 @@ data class NestedProvenance(
      * Return path of the provided [provenance] within this [NestedProvenance]. Throws an [IllegalArgumentException] if
      * the provided [provenance] cannot be found.
      */
-    fun getPath(provenance: KnownProvenance): String {
+    fun getPath(provenance: Provenance): String {
         if (provenance == root) return ""
 
         subRepositories.forEach { if (provenance == it.value) return it.key }
