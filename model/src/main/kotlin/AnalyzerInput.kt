@@ -58,14 +58,18 @@ data class AnalyzerInput(
     }
 
     /**
-     * Return the path of [otherProvenance] relative to [AnalyzerInput.provenance], or null if [otherProvenance] is neither [AnalyzerInput.provenance] nor contained
-     * in [nestedProvenances].
+     * Return the path of [otherProvenance] relative to [AnalyzerInput.provenance], or null if [otherProvenance] is
+     * neither [AnalyzerInput.provenance] nor contained in [nestedProvenances].
      */
     fun getRelativePath(otherProvenance: Provenance): String? {
-        fun Provenance.matches(other: Provenance) = (this is UnknownProvenance && other is UnknownProvenance)
-            || (this is ArtifactProvenance && other is ArtifactProvenance && this.sourceArtifact == other.sourceArtifact)
-            || (this is RepositoryProvenance && other is RepositoryProvenance && this.vcsInfo == other.vcsInfo &&
-                this.resolvedRevision == other.resolvedRevision)
+        fun Provenance.matches(other: Provenance) =
+            (
+                (this is UnknownProvenance && other is UnknownProvenance) || (
+                    this is ArtifactProvenance && other is ArtifactProvenance &&
+                    this.sourceArtifact == other.sourceArtifact) || (
+                        this is RepositoryProvenance && other is RepositoryProvenance &&
+                        this.vcsInfo == other.vcsInfo && this.resolvedRevision == other.resolvedRevision)
+                )
 
         if (provenance.matches(otherProvenance)) return ""
 
