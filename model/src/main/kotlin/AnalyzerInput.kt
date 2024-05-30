@@ -66,13 +66,17 @@ data class AnalyzerInput(
             (
                 (this is UnknownProvenance && other is UnknownProvenance) || (
                     this is ArtifactProvenance && other is ArtifactProvenance &&
-                    this.sourceArtifact == other.sourceArtifact) || (
-                        this is RepositoryProvenance && other is RepositoryProvenance &&
-                        this.vcsInfo == other.vcsInfo && this.resolvedRevision == other.resolvedRevision)
+                        this.sourceArtifact == other.sourceArtifact
+                    ) || (
+                    this is RepositoryProvenance && other is RepositoryProvenance &&
+                        this.vcsInfo == other.vcsInfo && this.resolvedRevision == other.resolvedRevision
+                    )
                 )
 
         if (provenance.matches(otherProvenance)) return ""
 
-        return nestedProvenances.subRepositories.entries.find { (_, nestedProvenance) -> nestedProvenance.matches(otherProvenance) }?.key
+        return nestedProvenances.subRepositories.entries.find { (_, nestedProvenance) ->
+            nestedProvenance.matches(otherProvenance)
+        }?.key
     }
 }
