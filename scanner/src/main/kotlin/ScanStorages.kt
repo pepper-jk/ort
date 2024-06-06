@@ -108,7 +108,7 @@ class ScanStorages(
             }
 
             results += readers.filterIsInstance<ProvenanceBasedScanStorageReader>().mapNotNull { reader ->
-                val scanResults = nestedProvenance.allProvenances.associateWith { reader.read(it) }
+                val scanResults = nestedProvenance.allKnownProvenances().associateWith { reader.read(it) }
                 NestedProvenanceScanResult(nestedProvenance, scanResults).takeIf { it.isComplete() }?.merge()
             }.flatten()
         }

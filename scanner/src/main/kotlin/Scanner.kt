@@ -749,7 +749,7 @@ fun ScanResult.toNestedProvenanceScanResult(nestedProvenance: NestedProvenance):
         findings.map { it.copy(location = it.location.copy(path = it.location.path.removePrefix(provenancePrefix))) }
     }
 
-    val scanResultsByProvenance = nestedProvenance.allProvenances.associateWith { provenance ->
+    val scanResultsByProvenance = nestedProvenance.allKnownProvenances().associateWith { provenance ->
         // TODO: Find a solution for how to associate issues to the correct scan result.
         listOf(
             copy(

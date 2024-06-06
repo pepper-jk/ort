@@ -59,6 +59,23 @@ data class NestedProvenance(
         }
 
     /**
+     * The set of all contained [KnownProvenance]s.
+     */
+    @JsonIgnore
+    fun allKnownProvenances(): Set<KnownProvenance> {
+        return if (root == UnknownProvenance) {
+            setOf<KnownProvenance>()
+        } else {
+            buildSet {
+                add(root as KnownProvenance)
+                for (value in subRepositories.values) {
+                    add(value as KnownProvenance)
+                }
+            }
+        }
+    }
+
+    /**
      * Return path of the provided [provenance] within this [NestedProvenance]. Throws an [IllegalArgumentException] if
      * the provided [provenance] cannot be found.
      */

@@ -166,7 +166,7 @@ internal class ScanController(
      * Return all [KnownProvenance]s contained in [nestedProvenances].
      */
     fun getAllProvenances(): Set<KnownProvenance> =
-        nestedProvenances.values.flatMapTo(mutableSetOf()) { it.allProvenances }
+        nestedProvenances.values.flatMapTo(mutableSetOf()) { it.allKnownProvenances() }
 
     /**
      * Return all scan results.
@@ -180,7 +180,7 @@ internal class ScanController(
     fun getIdsByProvenance(): Map<KnownProvenance, Set<Identifier>> =
         buildMap<_, MutableSet<Identifier>> {
             getNestedProvenancesByPackage().forEach { (pkg, nestedProvenance) ->
-                nestedProvenance.allProvenances.forEach { provenance ->
+                nestedProvenance.allKnownProvenances().forEach { provenance ->
                     getOrPut(provenance) { mutableSetOf() } += pkg.id
                 }
             }
@@ -304,7 +304,7 @@ internal class ScanController(
      * Return true if [ScanResult]s for the complete [NestedProvenance] of the package are available.
      */
     fun hasCompleteScanResult(scanner: ScannerWrapper, pkg: Package): Boolean =
-        getNestedProvenance(pkg.id)?.allProvenances?.all { provenance -> hasScanResult(scanner, provenance) } == true
+        getNestedProvenance(pkg.id)?.allKnownProvenances()?.all { provenance -> hasScanResult(scanner, provenance) } == true
 
     /**
      * Return true if a [ScanResult] for the provided [scanner] and [provenance] is available.
@@ -318,7 +318,7 @@ internal class ScanController(
     ): NestedProvenanceScanResult? {
         val nestedProvenance = nestedProvenances[root] ?: return null
 
-        val scanResults = nestedProvenance.allProvenances.associateWith { provenance ->
+        val scanResults = nestedProvenance.allKnownProvenances().associateWith { provenance ->
             getScanResults(provenance).map { it.copy(summary = it.summary.copy(issues = it.summary.issues + issues)) }
         }
 
