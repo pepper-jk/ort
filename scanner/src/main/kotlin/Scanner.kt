@@ -46,6 +46,7 @@ import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerRun
+import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
@@ -692,7 +693,8 @@ class Scanner(
         }
 
         val provenancesWithMissingArchives = controller.getNestedProvenancesByPackage()
-            .filterNot { (_, nestedProvenance) -> archiver.hasArchive(nestedProvenance.root) }
+            .filterNot { (_, nestedProvenance) -> nestedProvenance.root != UnknownProvenance &&
+                archiver.hasArchive(nestedProvenance.root as KnownProvenance) }
 
         if (provenancesWithMissingArchives.isEmpty()) return
 
@@ -706,6 +708,7 @@ class Scanner(
                 try {
                     dir = provenanceDownloader.downloadRecursively(nestedProvenance)
                     archiver.archive(dir, nestedProvenance.root)
+                    // as KnownProvenance does not really work here, since it can still be an UnknownProvenance as per boolean up top
                 } catch (e: DownloadException) {
                     controller.addIssue(
                         pkg.id,
