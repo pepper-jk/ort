@@ -78,12 +78,7 @@ data class Project(
     /**
      * Original VCS-related information as defined in the [Project]'s metadata.
      */
-    val vcs: VcsInfo,
-
-    /**
-     * Processed VCS-related information about the [Project] that has e.g. common mistakes corrected.
-     */
-    val vcsProcessed: VcsInfo = vcs.normalize(),
+    val provenance: KnownProvenance,
 
     /**
      * The URL to the project's homepage.
@@ -120,11 +115,24 @@ data class Project(
             authors = emptySet(),
             declaredLicenses = emptySet(),
             declaredLicensesProcessed = ProcessedDeclaredLicense.EMPTY,
-            vcs = VcsInfo.EMPTY,
-            vcsProcessed = VcsInfo.EMPTY,
+            provenance = RepositoryProvenance(VcsInfo.EMPTY, ""),
             homepageUrl = "",
             scopeDependencies = emptySet()
         )
+    }
+
+    @JsonIgnore
+    val vcs = if (provenance is RepositoryProvenance) {
+        provenance.vcsInfo
+    } else {
+        VcsInfo.EMPTY
+    }
+
+    @JsonIgnore
+    val vcsProcessed = if (provenance is RepositoryProvenance) {
+        provenance.vcsInfo.normalize()
+    } else {
+        VcsInfo.EMPTY
     }
 
     init {
