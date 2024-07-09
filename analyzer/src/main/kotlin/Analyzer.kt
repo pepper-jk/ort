@@ -148,7 +148,7 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
         var foundProvenance: KnownProvenance
 
         if (vcs == VcsInfo.EMPTY) {
-            val foundArtifact = analyzerResult.packages.first().sourceArtifact
+            val foundArtifact = analyzerResult.projects.first().toPackage().sourceArtifact
             foundProvenance = ArtifactProvenance(foundArtifact)
         } else {
             foundProvenance = RepositoryProvenance(vcs, revision)
