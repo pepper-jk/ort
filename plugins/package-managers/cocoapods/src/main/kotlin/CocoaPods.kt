@@ -43,6 +43,7 @@ import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
@@ -140,6 +141,7 @@ class CocoaPods(
             )
         }
 
+        val vcs = processProjectVcs(workingDir, VcsInfo.EMPTY)
         val projectAnalyzerResult = ProjectAnalyzerResult(
             packages = packages,
             project = Project(
@@ -152,8 +154,7 @@ class CocoaPods(
                 definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                 authors = emptySet(),
                 declaredLicenses = emptySet(),
-                vcs = VcsInfo.EMPTY,
-                vcsProcessed = processProjectVcs(workingDir),
+                provenance = RepositoryProvenance(vcs, vcs.revision),
                 scopeDependencies = scopes,
                 homepageUrl = ""
             ),

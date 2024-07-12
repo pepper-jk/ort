@@ -29,6 +29,7 @@ import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
@@ -110,7 +111,7 @@ class Unmanaged(
 
         return listOf(
             ProjectAnalyzerResult(
-                project = Project.EMPTY.copy(id = id, vcsProcessed = vcsInfo),
+                project = Project.EMPTY.copy(id = id, provenance = RepositoryProvenance(vcsInfo, vcsInfo.revision)),
                 packages = emptySet()
             )
         )

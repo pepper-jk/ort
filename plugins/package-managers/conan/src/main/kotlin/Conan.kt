@@ -39,6 +39,7 @@ import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
@@ -182,6 +183,7 @@ class Conan(
             )
 
             val projectPackage = parseProjectPackage(pkgInfos, definitionFile, workingDir)
+            val vcs = processProjectVcs(workingDir, projectPackage.vcs, projectPackage.homepageUrl)
 
             return listOf(
                 ProjectAnalyzerResult(
@@ -190,12 +192,7 @@ class Conan(
                         definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                         authors = projectPackage.authors,
                         declaredLicenses = projectPackage.declaredLicenses,
-                        vcs = projectPackage.vcs,
-                        vcsProcessed = processProjectVcs(
-                            workingDir,
-                            projectPackage.vcs,
-                            projectPackage.homepageUrl
-                        ),
+                        provenance = RepositoryProvenance(vcs, vcs.revision),
                         homepageUrl = projectPackage.homepageUrl,
                         scopeDependencies = setOf(dependenciesScope, devDependenciesScope)
                     ),

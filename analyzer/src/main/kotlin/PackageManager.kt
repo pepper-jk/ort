@@ -34,6 +34,7 @@ import org.ossreviewtoolkit.model.DependencyGraph
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
@@ -295,11 +296,11 @@ abstract class PackageManager(
                     it.showStackTrace()
 
                     val id = Identifier.EMPTY.copy(type = managerName, name = relativePath)
-
+                    val vcs = processProjectVcs(definitionFile.parentFile)
                     val projectWithIssues = Project.EMPTY.copy(
                         id = id,
                         definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-                        vcsProcessed = processProjectVcs(definitionFile.parentFile),
+                        provenance = RepositoryProvenance(vcs, vcs.revision),
                         scopeDependencies = null,
                         scopeNames = emptySet()
                     )

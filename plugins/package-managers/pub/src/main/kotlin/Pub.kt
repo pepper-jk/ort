@@ -47,6 +47,7 @@ import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.VcsInfo
@@ -501,6 +502,7 @@ class Pub(
         val authors = parseAuthors(pubspec)
 
         val vcs = VcsHost.parseUrl(repositoryUrl)
+        val vcsProcessed = processProjectVcs(definitionFile.parentFile, vcs, homepageUrl)
 
         return Project(
             id = Identifier(
@@ -513,8 +515,7 @@ class Pub(
             authors = authors,
             // Pub does not declare any licenses in the pubspec files, therefore we keep this empty.
             declaredLicenses = emptySet(),
-            vcs = vcs,
-            vcsProcessed = processProjectVcs(definitionFile.parentFile, vcs, homepageUrl),
+            provenance = RepositoryProvenance(vcsProcessed, vcsProcessed.revision),
             homepageUrl = homepageUrl,
             scopeDependencies = scopes
         )

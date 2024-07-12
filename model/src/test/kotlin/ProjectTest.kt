@@ -104,7 +104,7 @@ class ProjectTest : WordSpec({
                 id = projectId,
                 definitionFilePath = "/some/path",
                 declaredLicenses = emptySet(),
-                vcs = VcsInfo.EMPTY,
+                provenance = RepositoryProvenance(VcsInfo.EMPTY, ""),
                 homepageUrl = "https//www.test-project.org"
             )
 

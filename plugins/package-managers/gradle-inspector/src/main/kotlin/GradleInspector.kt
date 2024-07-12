@@ -48,6 +48,7 @@ import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.VcsInfo
@@ -240,13 +241,13 @@ class GradleInspector(
             Scope(name = it.name, dependencies = it.dependencies.toPackageRefs(packageDependencies))
         }
 
+        val vcs = processProjectVcs(definitionFile.parentFile, VcsInfo.EMPTY)
         val project = Project(
             id = projectId,
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
             authors = emptySet(),
             declaredLicenses = emptySet(),
-            vcs = VcsInfo.EMPTY,
-            vcsProcessed = processProjectVcs(definitionFile.parentFile),
+            provenance = RepositoryProvenance(vcs, vcs.revision),
             homepageUrl = "",
             scopeDependencies = scopes
         )

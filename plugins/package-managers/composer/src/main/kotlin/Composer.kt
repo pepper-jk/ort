@@ -37,6 +37,7 @@ import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
@@ -222,6 +223,7 @@ class Composer(
         val rawName = json["name"]?.textValue()
         val namespace = rawName?.substringBefore("/", missingDelimiterValue = "").orEmpty()
         val name = rawName?.substringAfter("/") ?: getFallbackProjectName(analysisRoot, definitionFile)
+        val vcsProcessed = processProjectVcs(definitionFile.parentFile, vcs, homepageUrl)
 
         return Project(
             id = Identifier(
@@ -233,8 +235,7 @@ class Composer(
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
             authors = parseAuthors(json),
             declaredLicenses = parseDeclaredLicenses(json),
-            vcs = vcs,
-            vcsProcessed = processProjectVcs(definitionFile.parentFile, vcs, homepageUrl),
+            provenance = RepositoryProvenance(vcsProcessed, vcsProcessed.revision),
             homepageUrl = homepageUrl,
             scopeDependencies = scopes
         )

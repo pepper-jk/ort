@@ -49,6 +49,7 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
@@ -551,6 +552,7 @@ open class Npm(
         val homepageUrl = json["homepage"].textValueOrEmpty()
         val projectDir = packageJson.parentFile
         val vcsFromPackage = parseNpmVcsInfo(json)
+        val vcs = processProjectVcs(projectDir, vcsFromPackage, homepageUrl)
 
         return Project(
             id = Identifier(
@@ -562,8 +564,7 @@ open class Npm(
             definitionFilePath = VersionControlSystem.getPathInfo(packageJson).path,
             authors = authors,
             declaredLicenses = declaredLicenses,
-            vcs = vcsFromPackage,
-            vcsProcessed = processProjectVcs(projectDir, vcsFromPackage, homepageUrl),
+            provenance = RepositoryProvenance(vcs, vcs.revision),
             homepageUrl = homepageUrl
         )
     }

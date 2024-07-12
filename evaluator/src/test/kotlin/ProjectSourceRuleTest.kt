@@ -220,7 +220,7 @@ private fun createOrtResult(
                 projects = setOf(
                     Project.EMPTY.copy(
                         id = id,
-                        vcsProcessed = vcsInfo
+                        provenance = RepositoryProvenance(vcsInfo, vcsInfo.revision)
                     )
                 )
             )

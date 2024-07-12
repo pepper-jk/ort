@@ -92,7 +92,7 @@ val ORT_RESULT = OrtResult(
                     id = Identifier("NPM:@ort:project-with-findings:1.0"),
                     definitionFilePath = "project-with-findings/package.json",
                     declaredLicenses = emptySet(),
-                    vcs = VcsInfo.EMPTY,
+                    provenance = RepositoryProvenance(VcsInfo.EMPTY, ""),
                     homepageUrl = "https://github.com/oss-review-toolkit/ort",
                     scopeDependencies = setOf(
                         Scope(
@@ -129,7 +129,7 @@ val ORT_RESULT = OrtResult(
                     id = Identifier("NPM:@ort:project-without-findings:1.0"),
                     definitionFilePath = "project-without-findings/package.json",
                     declaredLicenses = emptySet(),
-                    vcs = VcsInfo.EMPTY,
+                    provenance = RepositoryProvenance(VcsInfo.EMPTY, ""),
                     homepageUrl = "https://github.com/oss-review-toolkit/ort",
                     scopeDependencies = setOf(
                         Scope(
@@ -142,7 +142,7 @@ val ORT_RESULT = OrtResult(
                     id = Identifier("NPM:@ort:excluded-project:1.0"),
                     definitionFilePath = "excluded-project/package.json",
                     declaredLicenses = setOf("BSD-2-Clause"),
-                    vcs = VcsInfo.EMPTY,
+                    provenance = RepositoryProvenance(VcsInfo.EMPTY, ""),
                     homepageUrl = "https://github.com/oss-review-toolkit/ort",
                     scopeDependencies = emptySet()
                 )

@@ -30,6 +30,7 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.VcsInfo
@@ -70,13 +71,13 @@ internal fun NuGetInspector.Result.toOrtProject(
 
     val packageReferences = nestedPackages.toPackageReferences()
     val scopes = setOf(Scope(headers.first().projectFramework, packageReferences))
+    val vcs = PackageManager.processProjectVcs(definitionFile.parentFile, VcsInfo.EMPTY)
 
     return Project(
         id = id,
         definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-        vcs = VcsInfo.EMPTY,
+        provenance = RepositoryProvenance(vcs, vcs.revision),
         authors = emptySet(),
-        vcsProcessed = PackageManager.processProjectVcs(definitionFile.parentFile),
         declaredLicenses = emptySet(),
         homepageUrl = "",
         scopeDependencies = scopes

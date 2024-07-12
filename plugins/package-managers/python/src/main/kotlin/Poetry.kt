@@ -29,6 +29,7 @@ import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
@@ -85,6 +86,7 @@ class Poetry(
             .distinctBy { it.id }
             .toSet()
 
+        val vcs = processProjectVcs(definitionFile.parentFile)
         val project = Project.EMPTY.copy(
             id = Identifier(
                 type = managerName,
@@ -96,7 +98,7 @@ class Poetry(
             scopeDependencies = resultsForScopeName.mapTo(mutableSetOf()) { (scopeName, results) ->
                 Scope(scopeName, results.resolvedDependenciesGraph.toPackageReferences())
             },
-            vcsProcessed = processProjectVcs(definitionFile.parentFile)
+            provenance = RepositoryProvenance(vcs, vcs.revision)
         )
 
         return listOf(ProjectAnalyzerResult(project, packages))

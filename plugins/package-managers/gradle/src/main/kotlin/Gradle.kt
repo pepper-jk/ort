@@ -47,6 +47,7 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
@@ -279,13 +280,13 @@ class Gradle(
                         }
                     }
 
+                val vcs = processProjectVcs(definitionFile.parentFile, VcsInfo.EMPTY)
                 val project = Project(
                     id = projectId,
                     definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                     authors = emptySet(),
                     declaredLicenses = emptySet(),
-                    vcs = VcsInfo.EMPTY,
-                    vcsProcessed = processProjectVcs(definitionFile.parentFile),
+                    provenance = RepositoryProvenance(vcs, vcs.revision),
                     homepageUrl = "",
                     scopeNames = graphBuilder.scopesFor(projectId)
                 )

@@ -89,20 +89,17 @@ class OrtResultTest : WordSpec({
             val project1 = Project.EMPTY.copy(
                 id = Identifier("Gradle:org.ossreviewtoolkit:project1:1.0"),
                 definitionFilePath = "project1/build.gradle",
-                vcs = vcs,
-                vcsProcessed = vcs.normalize()
+                provenance = RepositoryProvenance(vcs, vcs.revision)
             )
             val project2 = Project.EMPTY.copy(
                 id = Identifier("Gradle:org.ossreviewtoolkit:project2:1.0"),
                 definitionFilePath = "project2/build.gradle",
-                vcs = nestedVcs1,
-                vcsProcessed = nestedVcs1.normalize()
+                provenance = RepositoryProvenance(nestedVcs1, nestedVcs1.revision)
             )
             val project3 = Project.EMPTY.copy(
                 id = Identifier("Gradle:org.ossreviewtoolkit:project3:1.0"),
                 definitionFilePath = "project3/build.gradle",
-                vcs = nestedVcs2,
-                vcsProcessed = nestedVcs2.normalize()
+                provenance = RepositoryProvenance(nestedVcs2, nestedVcs2.revision)
             )
             val ortResult = OrtResult(
                 Repository(
@@ -129,8 +126,7 @@ class OrtResultTest : WordSpec({
             val project = Project.EMPTY.copy(
                 id = Identifier("Gradle:org.ossreviewtoolkit:project1:1.0"),
                 definitionFilePath = "build.gradle",
-                vcs = nestedVcs2,
-                vcsProcessed = nestedVcs2.normalize()
+                provenance = RepositoryProvenance(nestedVcs2, nestedVcs2.revision)
             )
             val ortResult = OrtResult(
                 Repository(
@@ -279,7 +275,7 @@ class OrtResultTest : WordSpec({
                                 id = projectId,
                                 definitionFilePath = "pom.xml",
                                 declaredLicenses = emptySet(),
-                                vcsProcessed = vcs
+                                provenance = RepositoryProvenance(vcs, vcs.revision)
                             )
                         )
                     )

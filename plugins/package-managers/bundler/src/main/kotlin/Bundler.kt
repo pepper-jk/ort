@@ -47,6 +47,7 @@ import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
@@ -215,13 +216,13 @@ class Bundler(
                 parseScope(workingDir, projectId, groupName, dependencyList, scopes, gemSpecs, issues)
             }
 
+            val vcs = processProjectVcs(workingDir, VcsInfo.EMPTY, homepageUrl)
             val project = Project(
                 id = projectId,
                 definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                 authors = authors,
                 declaredLicenses = declaredLicenses,
-                vcs = VcsInfo.EMPTY,
-                vcsProcessed = processProjectVcs(workingDir, VcsInfo.EMPTY, homepageUrl),
+                provenance = RepositoryProvenance(vcs, vcs.revision),
                 homepageUrl = homepageUrl,
                 scopeDependencies = scopes
             )

@@ -40,6 +40,7 @@ import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
@@ -138,8 +139,7 @@ class GoMod(
                         definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                         authors = emptySet(), // Go mod doesn't support author information.
                         declaredLicenses = emptySet(), // Go mod doesn't support declared licenses.
-                        vcs = projectVcs,
-                        vcsProcessed = projectVcs,
+                        provenance = RepositoryProvenance(projectVcs, projectVcs.revision),
                         homepageUrl = "",
                         scopeDependencies = scopes
                     ),

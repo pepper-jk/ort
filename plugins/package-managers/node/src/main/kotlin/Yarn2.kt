@@ -49,6 +49,7 @@ import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
@@ -489,12 +490,12 @@ class Yarn2(
 
             val additionalData = getProjectAdditionalData(workingDir, name, version)
             val id = Identifier("Yarn2", namespace, name, version)
+            val vcs = processProjectVcs(definitionFile.parentFile, additionalData.vcsFromPackage, homepageUrl)
             allProjects += id to Project(
                 id = id.copy(type = managerName),
                 definitionFilePath = VersionControlSystem.getPathInfo(projectFile).path,
                 declaredLicenses = declaredLicenses,
-                vcs = additionalData.vcsFromPackage,
-                vcsProcessed = processProjectVcs(definitionFile.parentFile, additionalData.vcsFromPackage, homepageUrl),
+                provenance = RepositoryProvenance(vcs, vcs.revision),
                 homepageUrl = homepageUrl
             )
             id

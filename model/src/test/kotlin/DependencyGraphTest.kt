@@ -198,7 +198,7 @@ class DependencyGraphTest : WordSpec({
                 definitionFilePath = "/some/path/pom.xml",
                 declaredLicenses = emptySet(),
                 homepageUrl = "https://project.example.org",
-                vcs = VcsInfo.EMPTY
+                provenance = RepositoryProvenance(VcsInfo.EMPTY, "")
             )
 
             val qualifiedScopeName = DependencyGraph.qualifyScope(project, scopeName)

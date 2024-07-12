@@ -43,6 +43,7 @@ import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
@@ -119,8 +120,7 @@ class Bazel(
                     ),
                     definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                     declaredLicenses = emptySet(),
-                    vcs = projectVcs,
-                    vcsProcessed = projectVcs,
+                    provenance = RepositoryProvenance(projectVcs, projectVcs.revision),
                     homepageUrl = "",
                     scopeDependencies = scopes
                 ),

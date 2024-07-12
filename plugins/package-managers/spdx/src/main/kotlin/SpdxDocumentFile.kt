@@ -40,6 +40,7 @@ import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
@@ -512,13 +513,14 @@ class SpdxDocumentFile(
             dependencies = getDependencies(projectPackage.spdxId, transitiveDocument, packages)
         )
 
+        val vcs = processProjectVcs(definitionFile.parentFile, VcsInfo.EMPTY)
         val project = Project(
             id = projectPackage.toIdentifier(),
             cpe = projectPackage.locateCpe(),
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
             authors = projectPackage.originator.wrapPresentInSet(),
             declaredLicenses = setOf(projectPackage.licenseDeclared),
-            vcs = processProjectVcs(definitionFile.parentFile, VcsInfo.EMPTY),
+            provenance = RepositoryProvenance(vcs, vcs.revision),
             homepageUrl = projectPackage.homepage.mapNotPresentToEmpty(),
             scopeDependencies = scopes
         )

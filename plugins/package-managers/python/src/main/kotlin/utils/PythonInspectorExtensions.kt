@@ -29,6 +29,7 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
@@ -48,13 +49,13 @@ internal fun PythonInspector.Result.toOrtProject(
 
     val scopes = setOf(Scope("install", resolvedDependenciesGraph.toPackageReferences()))
 
+    val vcs = PackageManager.processProjectVcs(definitionFile.parentFile, VcsInfo.EMPTY, homepageUrl)
     return Project(
         id = id,
         definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
         authors = projectData?.parties?.toAuthors().orEmpty(),
         declaredLicenses = projectData?.declaredLicense?.getDeclaredLicenses().orEmpty(),
-        vcs = VcsInfo.EMPTY,
-        vcsProcessed = PackageManager.processProjectVcs(definitionFile.parentFile, VcsInfo.EMPTY, homepageUrl),
+        provenance = RepositoryProvenance(vcs, vcs.revision),
         homepageUrl = homepageUrl,
         scopeDependencies = scopes
     )

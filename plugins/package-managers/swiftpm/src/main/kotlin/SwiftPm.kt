@@ -33,6 +33,7 @@ import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
@@ -180,13 +181,13 @@ class SwiftPm(
             name = getFallbackProjectName(analysisRoot, definitionFile)
         )
 
+        val vcs = processProjectVcs(definitionFile.parentFile, VcsInfo.EMPTY)
         return Project(
-            vcs = VcsInfo.EMPTY,
             id = projectIdentifier,
             declaredLicenses = emptySet(),
             homepageUrl = "",
             scopeDependencies = scopeDependencies,
-            vcsProcessed = processProjectVcs(definitionFile.parentFile),
+            provenance = RepositoryProvenance(vcs, vcs.revision),
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path
         )
     }

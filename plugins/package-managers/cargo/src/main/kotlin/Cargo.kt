@@ -40,6 +40,7 @@ import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
@@ -178,14 +179,14 @@ class Cargo(
             cargoPkg.toPackage(hashes).let { it.copy(id = it.id.copy(type = managerName)) }
         }
 
+        val vcs = processProjectVcs(workingDir, projectPkg.vcs, projectPkg.homepageUrl)
         val project = Project(
             id = projectPkg.id,
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
             authors = projectPkg.authors,
             declaredLicenses = projectPkg.declaredLicenses,
             declaredLicensesProcessed = projectPkg.declaredLicensesProcessed,
-            vcs = projectPkg.vcs,
-            vcsProcessed = processProjectVcs(workingDir, projectPkg.vcs, projectPkg.homepageUrl),
+            provenance = RepositoryProvenance(vcs, vcs.revision),
             homepageUrl = projectPkg.homepageUrl,
             scopeDependencies = scopes
         )

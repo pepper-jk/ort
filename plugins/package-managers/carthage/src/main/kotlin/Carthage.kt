@@ -34,6 +34,7 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
@@ -70,6 +71,7 @@ class Carthage(
         // See: https://github.com/Carthage/Carthage#nested-dependencies
         val workingDir = definitionFile.parentFile
         val projectInfo = getProjectInfoFromVcs(definitionFile)
+        val vcs = processProjectVcs(workingDir, VcsInfo.EMPTY)
 
         return listOf(
             ProjectAnalyzerResult(
@@ -83,8 +85,7 @@ class Carthage(
                     definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                     authors = emptySet(),
                     declaredLicenses = emptySet(),
-                    vcs = VcsInfo.EMPTY,
-                    vcsProcessed = processProjectVcs(workingDir, VcsInfo.EMPTY),
+                    provenance = RepositoryProvenance(vcs, vcs.revision),
                     scopeDependencies = emptySet(),
                     homepageUrl = ""
                 ),

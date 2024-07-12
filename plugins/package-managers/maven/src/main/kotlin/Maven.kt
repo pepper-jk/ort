@@ -36,6 +36,7 @@ import org.ossreviewtoolkit.model.DependencyGraph
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
@@ -137,6 +138,7 @@ class Maven(
         val browsableScmUrl = MavenSupport.getOriginalScm(mavenProject)?.url
         val homepageUrl = mavenProject.url
         val vcsFallbackUrls = listOfNotNull(browsableScmUrl, homepageUrl).toTypedArray()
+        val vcs = processProjectVcs(projectDir, vcsFromPackage, *vcsFallbackUrls)
 
         val project = Project(
             id = projectId,
@@ -144,8 +146,7 @@ class Maven(
             authors = MavenSupport.parseAuthors(mavenProject),
             declaredLicenses = declaredLicenses,
             declaredLicensesProcessed = declaredLicensesProcessed,
-            vcs = vcsFromPackage,
-            vcsProcessed = processProjectVcs(projectDir, vcsFromPackage, *vcsFallbackUrls),
+            provenance = RepositoryProvenance(vcs, vcs.revision),
             homepageUrl = homepageUrl.orEmpty(),
             scopeNames = graphBuilder.scopesFor(projectId)
         )

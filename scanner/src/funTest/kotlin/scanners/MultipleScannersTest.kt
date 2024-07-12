@@ -31,6 +31,7 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageType
 import org.ossreviewtoolkit.model.Project
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 
@@ -74,8 +75,7 @@ private fun createAnalyzerResult(): OrtResult {
 
     val project = Project.EMPTY.copy(
         id = PROJECT_ID,
-        vcs = vcs,
-        vcsProcessed = vcs.normalize()
+        provenance = RepositoryProvenance(vcs, vcs.revision)
     )
 
     val analyzerRun = AnalyzerRun.EMPTY.copy(

@@ -99,8 +99,7 @@ internal class CreateAnalyzerResultFromPackageListCommand : CliktCommand(
 
         val project = Project.EMPTY.copy(
             id = Identifier("$PROJECT_TYPE::$projectName:"),
-            vcs = projectVcs,
-            vcsProcessed = projectVcs.normalize(),
+            provenance = RepositoryProvenance(projectVcs, projectVcs.revision),
             scopeDependencies = setOfNotNull(
                 packageList.dependencies.filterNot { it.isExcluded }.toScope(MAIN_SCOPE_NAME),
                 packageList.dependencies.filter { it.isExcluded }.toScope(EXCLUDED_SCOPE_NAME)
