@@ -36,16 +36,13 @@ analyzer:
         spdx_expression: "MIT"
         mapped:
           The MIT License: "MIT"
-      vcs:
-        type: "Git"
-        url: "git@github.com:vdurmont/semver4j.git"
-        revision: ""
-        path: ""
-      vcs_processed:
-        type: "Git"
-        url: "https://github.com/vdurmont/semver4j.git"
-        revision: "7653e418d610ffcd2811bcb55fd72d00d420950b"
-        path: ""
+      provenance:
+        vcs_info:
+          type: "Git"
+          url: "git@github.com:vdurmont/semver4j.git"
+          revision: "7653e418d610ffcd2811bcb55fd72d00d420950b"
+          path: ""
+        resolved_revision: "7653e418d610ffcd2811bcb55fd72d00d420950b"
       homepage_url: "https://github.com/vdurmont/semver4j"
       scope_names:
       - "test"

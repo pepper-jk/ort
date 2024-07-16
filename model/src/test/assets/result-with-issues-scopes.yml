@@ -30,16 +30,13 @@ analyzer:
       - "com.pbassiner"
       declared_licenses: []
       declared_licenses_processed: {}
-      vcs:
-        type: ""
-        url: ""
-        revision: ""
-        path: ""
-      vcs_processed:
-        type: "Git"
-        url: "https://github.com/pbassiner/sbt-multi-project-example.git"
-        revision: "31687c099ea6d645e819ef9d6ac9fc4c757a96bc"
-        path: "common"
+      provenance:
+        vcs_info:
+          type: "Git"
+          url: "https://github.com/pbassiner/sbt-multi-project-example.git"
+          revision: "31687c099ea6d645e819ef9d6ac9fc4c757a96bc"
+          path: "common"
+        resolved_revision: "31687c099ea6d645e819ef9d6ac9fc4c757a96bc"
       homepage_url: ""
       scopes:
       - name: "compile"
@@ -93,16 +90,13 @@ analyzer:
       - "com.pbassiner"
       declared_licenses: []
       declared_licenses_processed: {}
-      vcs:
-        type: ""
-        url: ""
-        revision: ""
-        path: ""
-      vcs_processed:
-        type: "Git"
-        url: "https://github.com/pbassiner/sbt-multi-project-example.git"
-        revision: "31687c099ea6d645e819ef9d6ac9fc4c757a96bc"
-        path: "multi1"
+      provenance:
+        vcs_info:
+          type: "Git"
+          url: "https://github.com/pbassiner/sbt-multi-project-example.git"
+          revision: "31687c099ea6d645e819ef9d6ac9fc4c757a96bc"
+          path: "multi1"
+        resolved_revision: "31687c099ea6d645e819ef9d6ac9fc4c757a96bc"
       homepage_url: ""
       scopes:
       - name: "compile"
@@ -154,16 +148,13 @@ analyzer:
       - "com.pbassiner"
       declared_licenses: []
       declared_licenses_processed: {}
-      vcs:
-        type: ""
-        url: ""
-        revision: ""
-        path: ""
-      vcs_processed:
-        type: "Git"
-        url: "https://github.com/pbassiner/sbt-multi-project-example.git"
-        revision: "31687c099ea6d645e819ef9d6ac9fc4c757a96bc"
-        path: "multi2"
+      provenance:
+        vcs_info:
+          type: "Git"
+          url: "https://github.com/pbassiner/sbt-multi-project-example.git"
+          revision: "31687c099ea6d645e819ef9d6ac9fc4c757a96bc"
+          path: "multi2"
+        resolved_revision: "31687c099ea6d645e819ef9d6ac9fc4c757a96bc"
       homepage_url: ""
       scopes:
       - name: "compile"
@@ -216,16 +207,13 @@ analyzer:
       - "com.pbassiner"
       declared_licenses: []
       declared_licenses_processed: {}
-      vcs:
-        type: ""
-        url: ""
-        revision: ""
-        path: ""
-      vcs_processed:
-        type: "Git"
-        url: "https://github.com/pbassiner/sbt-multi-project-example.git"
-        revision: "31687c099ea6d645e819ef9d6ac9fc4c757a96bc"
-        path: ""
+      provenance:
+        vcs_info:
+          type: "Git"
+          url: "https://github.com/pbassiner/sbt-multi-project-example.git"
+          revision: "31687c099ea6d645e819ef9d6ac9fc4c757a96bc"
+          path: ""
+        resolved_revision: "31687c099ea6d645e819ef9d6ac9fc4c757a96bc"
       homepage_url: ""
       scopes:
       - name: "compile"

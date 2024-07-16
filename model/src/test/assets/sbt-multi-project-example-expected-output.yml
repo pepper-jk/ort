@@ -31,16 +31,13 @@ analyzer:
       - "com.pbassiner"
       declared_licenses: []
       declared_licenses_processed: {}
-      vcs:
-        type: ""
-        url: ""
-        revision: ""
-        path: ""
-      vcs_processed:
-        type: "Git"
-        url: "https://github.com/oss-review-toolkit/sbt-multi-project-example.git"
-        revision: "3c4e434b241b1f1addc97794932043b86afc2548"
-        path: "common"
+      provenance:
+        vcs_info:
+          type: "Git"
+          url: "https://github.com/oss-review-toolkit/sbt-multi-project-example.git"
+          revision: "3c4e434b241b1f1addc97794932043b86afc2548"
+          path: "common"
+        resolved_revision: "3c4e434b241b1f1addc97794932043b86afc2548"
       homepage_url: ""
       scopes:
       - name: "compile"
@@ -84,16 +81,13 @@ analyzer:
       - "com.pbassiner"
       declared_licenses: []
       declared_licenses_processed: {}
-      vcs:
-        type: ""
-        url: ""
-        revision: ""
-        path: ""
-      vcs_processed:
-        type: "Git"
-        url: "https://github.com/oss-review-toolkit/sbt-multi-project-example.git"
-        revision: "3c4e434b241b1f1addc97794932043b86afc2548"
-        path: "multi1"
+      provenance:
+        vcs_info:
+          type: "Git"
+          url: "https://github.com/oss-review-toolkit/sbt-multi-project-example.git"
+          revision: "3c4e434b241b1f1addc97794932043b86afc2548"
+          path: "multi1"
+        resolved_revision: "3c4e434b241b1f1addc97794932043b86afc2548"
       homepage_url: ""
       scopes:
       - name: "compile"
@@ -145,16 +139,13 @@ analyzer:
       - "com.pbassiner"
       declared_licenses: []
       declared_licenses_processed: {}
-      vcs:
-        type: ""
-        url: ""
-        revision: ""
-        path: ""
-      vcs_processed:
-        type: "Git"
-        url: "https://github.com/oss-review-toolkit/sbt-multi-project-example.git"
-        revision: "3c4e434b241b1f1addc97794932043b86afc2548"
-        path: "multi2"
+      provenance:
+        vcs_info:
+          type: "Git"
+          url: "https://github.com/oss-review-toolkit/sbt-multi-project-example.git"
+          revision: "3c4e434b241b1f1addc97794932043b86afc2548"
+          path: "multi2"
+        resolved_revision: "3c4e434b241b1f1addc97794932043b86afc2548"
       homepage_url: ""
       scopes:
       - name: "compile"
@@ -207,16 +198,13 @@ analyzer:
       - "com.pbassiner"
       declared_licenses: []
       declared_licenses_processed: {}
-      vcs:
-        type: ""
-        url: ""
-        revision: ""
-        path: ""
-      vcs_processed:
-        type: "Git"
-        url: "https://github.com/oss-review-toolkit/sbt-multi-project-example.git"
-        revision: "3c4e434b241b1f1addc97794932043b86afc2548"
-        path: ""
+      provenance:
+        vcs_info:
+          type: "Git"
+          url: "https://github.com/oss-review-toolkit/sbt-multi-project-example.git"
+          revision: "3c4e434b241b1f1addc97794932043b86afc2548"
+          path: ""
+        resolved_revision: "3c4e434b241b1f1addc97794932043b86afc2548"
       homepage_url: ""
       scopes:
       - name: "compile"
