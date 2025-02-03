@@ -7,6 +7,7 @@ on:
   push:
     branches:
       - main
+      - provenance-directory
 
 env:
   GRADLE_OPTS: -Dorg.gradle.daemon=false
