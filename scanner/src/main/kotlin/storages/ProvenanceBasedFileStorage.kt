@@ -28,6 +28,7 @@ import java.io.IOException
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.ArtifactProvenance
+import org.ossreviewtoolkit.model.DirectoryProvenance
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.RemoteProvenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
@@ -122,7 +123,7 @@ class ProvenanceBasedFileStorage(private val backend: FileStorage) : ProvenanceB
     }
 }
 
-private fun storagePath(provenance: RemoteProvenance) =
+private fun storagePath(provenance: KnownProvenance) =
     when (provenance) {
         is ArtifactProvenance -> "artifact/${provenance.sourceArtifact.url.fileSystemEncode()}/$SCAN_RESULTS_FILE_NAME"
         is RepositoryProvenance -> {
@@ -131,6 +132,8 @@ private fun storagePath(provenance: RemoteProvenance) =
                 "/${provenance.resolvedRevision.fileSystemEncode()}" +
                 "/$SCAN_RESULTS_FILE_NAME"
         }
+
+        is DirectoryProvenance -> "directory/${provenance.canonicalPath}/$SCAN_RESULTS_FILE_NAME"
     }
 
 private fun ScanResult.matches(other: ScanResult): Boolean {
