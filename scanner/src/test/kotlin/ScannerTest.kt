@@ -974,7 +974,7 @@ private class FakePathScannerWrapper : PathScannerWrapper {
  * provenance, instead of actually downloading the source code.
  */
 private class FakeProvenanceDownloader(val filename: String = "fake.txt") : ProvenanceDownloader {
-    override fun download(provenance: RemoteProvenance): File =
+    override fun download(provenance: KnownProvenance): File =
         createOrtTempDir().apply {
             resolve(filename).writeText(provenance.toYaml())
         }

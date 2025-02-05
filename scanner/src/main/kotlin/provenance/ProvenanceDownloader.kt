@@ -29,8 +29,9 @@ import org.ossreviewtoolkit.downloader.DownloadException
 import org.ossreviewtoolkit.downloader.Downloader
 import org.ossreviewtoolkit.downloader.WorkingTreeCache
 import org.ossreviewtoolkit.model.ArtifactProvenance
+import org.ossreviewtoolkit.model.DirectoryProvenance
+import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.Package
-import org.ossreviewtoolkit.model.RemoteProvenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
@@ -48,7 +49,7 @@ fun interface ProvenanceDownloader {
      *
      * Throws a [DownloadException] if the download fails.
      */
-    fun download(provenance: RemoteProvenance): File
+    fun download(provenance: KnownProvenance): File
 
     /**
      * Download the source code specified by the provided [nestedProvenance] incl. sub-repositories and return the path
@@ -83,7 +84,7 @@ class DefaultProvenanceDownloader(
 ) : ProvenanceDownloader {
     private val downloader = Downloader(config)
 
-    override fun download(provenance: RemoteProvenance): File {
+    override fun download(provenance: KnownProvenance): File {
         val downloadDir = createOrtTempDir()
 
         when (provenance) {
@@ -94,6 +95,10 @@ class DefaultProvenanceDownloader(
 
             is RepositoryProvenance -> {
                 runBlocking { downloadFromVcs(provenance, downloadDir) }
+            }
+
+            is DirectoryProvenance -> {
+                provenance.canonicalPath.copyRecursively(downloadDir, overwrite = true)
             }
         }
 
