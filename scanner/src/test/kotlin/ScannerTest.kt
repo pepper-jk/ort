@@ -1013,7 +1013,7 @@ private class FakePackageProvenanceResolver : PackageProvenanceResolver {
  * An implementation of [NestedProvenanceResolver] that always returns a non-nested provenance.
  */
 private class FakeNestedProvenanceResolver : NestedProvenanceResolver {
-    override suspend fun resolveNestedProvenance(provenance: RemoteProvenance): NestedProvenance =
+    override suspend fun resolveNestedProvenance(provenance: KnownProvenance): NestedProvenance =
         NestedProvenance(root = provenance, subRepositories = emptyMap())
 }
 
@@ -1125,7 +1125,7 @@ private fun createStoredScanResult(provenance: Provenance, scannerDetails: Scann
     )
 
 private fun createStoredNestedScanResult(
-    provenance: RemoteProvenance,
+    provenance: KnownProvenance,
     scannerDetails: ScannerDetails,
     subRepositories: Map<String, RepositoryProvenance> = emptyMap()
 ) = NestedProvenanceScanResult(

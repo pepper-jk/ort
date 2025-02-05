@@ -23,7 +23,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.KnownProvenance
-import org.ossreviewtoolkit.model.RemoteProvenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
 
 /**
@@ -33,7 +32,7 @@ data class NestedProvenance(
     /**
      * The root provenance that contains the [nested provenances][subRepositories].
      */
-    val root: RemoteProvenance,
+    val root: KnownProvenance,
 
     /**
      * If [root] is a [RepositoryProvenance] this map contains all paths which contain nested repositories associated
@@ -46,7 +45,7 @@ data class NestedProvenance(
      * The set of all contained [KnownProvenance]s.
      */
     @JsonIgnore
-    val allProvenances: Set<RemoteProvenance> =
+    val allProvenances: Set<KnownProvenance> =
         buildSet {
             add(root)
             addAll(subRepositories.values)

@@ -166,7 +166,7 @@ internal class ScanController(
     /**
      * Return all [KnownProvenance]s contained in [nestedProvenances].
      */
-    fun getAllProvenances(): Set<RemoteProvenance> =
+    fun getAllProvenances(): Set<KnownProvenance> =
         nestedProvenances.values.flatMapTo(mutableSetOf()) { it.allProvenances }
 
     /**
@@ -178,7 +178,7 @@ internal class ScanController(
     /**
      * Return all provenances including sub-repositories associated with the identifiers of the packages they belong to.
      */
-    fun getIdsByProvenance(): Map<RemoteProvenance, Set<Identifier>> =
+    fun getIdsByProvenance(): Map<KnownProvenance, Set<Identifier>> =
         buildMap<_, MutableSet<Identifier>> {
             getNestedProvenancesByPackage().forEach { (pkg, nestedProvenance) ->
                 nestedProvenance.allProvenances.forEach { provenance ->
