@@ -35,8 +35,8 @@ import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
 
 import org.ossreviewtoolkit.model.ArtifactProvenance
+import org.ossreviewtoolkit.model.DirectoryProvenance
 import org.ossreviewtoolkit.model.KnownProvenance
-import org.ossreviewtoolkit.model.RemoteProvenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
@@ -87,10 +87,6 @@ class ProvenanceBasedPostgresStorage(
             return database.transaction {
                 val query = table.selectAll()
 
-                if (provenance !is RemoteProvenance) {
-                    throw ScanStorageException("Scan result must have a known provenance, but it is $provenance.")
-                }
-
                 when (provenance) {
                     is ArtifactProvenance -> {
                         query.andWhere {
@@ -104,6 +100,13 @@ class ProvenanceBasedPostgresStorage(
                             table.vcsType eq provenance.vcsInfo.type.toString() and
                                 (table.vcsUrl eq provenance.vcsInfo.url) and
                                 (table.vcsRevision eq provenance.resolvedRevision)
+                        }
+                    }
+
+                    is DirectoryProvenance -> {
+                        query.andWhere {
+                            table.directoryPath eq provenance.canonicalPath.toString() and
+                                (table.directoryHash eq provenance.canonicalPath.hashCode().toString())
                         }
                     }
                 }
@@ -142,7 +145,7 @@ class ProvenanceBasedPostgresStorage(
 
         requireEmptyVcsPath(provenance)
 
-        if (provenance !is RemoteProvenance) {
+        if (provenance !is KnownProvenance) {
             throw ScanStorageException("Scan result must have a known provenance, but it is $provenance.")
         }
 
@@ -159,6 +162,11 @@ class ProvenanceBasedPostgresStorage(
                             it[vcsType] = provenance.vcsInfo.type.toString()
                             it[vcsUrl] = provenance.vcsInfo.url
                             it[vcsRevision] = provenance.resolvedRevision
+                        }
+
+                        is DirectoryProvenance -> {
+                            it[directoryPath] = provenance.canonicalPath.toString()
+                            it[directoryHash] = provenance.canonicalPath.hashCode().toString()
                         }
                     }
 
@@ -184,6 +192,8 @@ private class ProvenanceScanResults(tableName: String) : IntIdTable(tableName) {
     val vcsType = text("vcs_type").nullable()
     val vcsUrl = text("vcs_url").nullable()
     val vcsRevision = text("vcs_revision").nullable()
+    val directoryPath = text("directory_path").nullable()
+    val directoryHash = text("directory_hash").nullable()
     val scannerName = text("scanner_name")
     val scannerVersion = text("scanner_version")
     val scannerConfiguration = text("scanner_configuration")
@@ -193,9 +203,11 @@ private class ProvenanceScanResults(tableName: String) : IntIdTable(tableName) {
         // Indices to prevent duplicate entries.
         uniqueIndex(artifactUrl, artifactHash, scannerName, scannerVersion, scannerConfiguration)
         uniqueIndex(vcsType, vcsUrl, vcsRevision, scannerName, scannerVersion, scannerConfiguration)
+        uniqueIndex(directoryPath, directoryHash, scannerName, scannerVersion, scannerConfiguration)
 
         // Indices to improve lookup performance.
         index(isUnique = false, artifactUrl, artifactHash)
         index(isUnique = false, vcsType, vcsUrl, vcsRevision)
+        index(isUnique = false, directoryPath, directoryHash)
     }
 }
