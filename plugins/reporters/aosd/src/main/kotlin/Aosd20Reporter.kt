@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.plugins.reporters.aosd
 import java.io.File
 
 import org.ossreviewtoolkit.model.ArtifactProvenance
+import org.ossreviewtoolkit.model.DirectoryProvenance
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.Package
@@ -133,6 +134,12 @@ private fun Package.toLicenses(input: ReporterInput): List<AOSD20.License> {
         )
 
         is ArtifactProvenance -> licenses += getLicenses(
+            LicenseView.ONLY_DETECTED,
+            AOSD20.Origin.LICENSE_FILE,
+            copyrights
+        )
+
+        is DirectoryProvenance -> licenses += getLicenses(
             LicenseView.ONLY_DETECTED,
             AOSD20.Origin.LICENSE_FILE,
             copyrights
