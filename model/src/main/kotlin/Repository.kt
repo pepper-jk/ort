@@ -31,12 +31,12 @@ data class Repository(
     /**
      * Provenance wrapper for original VCS information, if present.
      */
-    val provenance: RepositoryProvenance,
+    val provenance: RemoteProvenance,
 
     /**
      * Original VCS-related information from the working tree containing the analyzer root.
      */
-    val vcs: VcsInfo = provenance.vcsInfo,
+    val vcs: VcsInfo = if (provenance is RepositoryProvenance) provenance.vcsInfo else VcsInfo.EMPTY,
 
     /**
      * Processed VCS-related information from the working tree containing the analyzer root that has e.g. common
