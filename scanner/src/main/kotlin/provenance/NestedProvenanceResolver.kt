@@ -23,6 +23,7 @@ import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.downloader.WorkingTreeCache
 import org.ossreviewtoolkit.model.ArtifactProvenance
+import org.ossreviewtoolkit.model.DirectoryProvenance
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
@@ -50,6 +51,7 @@ class DefaultNestedProvenanceResolver(
         return when (provenance) {
             is ArtifactProvenance -> NestedProvenance(root = provenance, subRepositories = emptyMap())
             is RepositoryProvenance -> resolveNestedRepository(provenance)
+            is DirectoryProvenance -> NestedProvenance(root = provenance, subRepositories = emptyMap())
         }
     }
 
