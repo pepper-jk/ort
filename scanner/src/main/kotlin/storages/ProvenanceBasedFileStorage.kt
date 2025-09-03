@@ -28,6 +28,7 @@ import java.io.IOException
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.ArtifactProvenance
+import org.ossreviewtoolkit.model.DirectoryProvenance
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
@@ -131,6 +132,10 @@ private fun storagePath(provenance: KnownProvenance) =
                 "/${provenance.vcsInfo.url.fileSystemEncode()}" +
                 "/${provenance.resolvedRevision.fileSystemEncode()}" +
                 "/$SCAN_RESULTS_FILE_NAME"
+        }
+
+        is DirectoryProvenance -> {
+            "directory/${provenance.canonicalPath.toString().fileSystemEncode()}/$SCAN_RESULTS_FILE_NAME"
         }
     }
 
