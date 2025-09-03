@@ -36,6 +36,7 @@ import org.jetbrains.exposed.sql.insertIgnoreAndGetId
 import org.jetbrains.exposed.sql.selectAll
 
 import org.ossreviewtoolkit.model.ArtifactProvenance
+import org.ossreviewtoolkit.model.DirectoryProvenance
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
@@ -102,6 +103,12 @@ class ProvenanceBasedPostgresStorage(
                                 (table.vcsRevision eq provenance.resolvedRevision)
                         }
                     }
+
+                    is DirectoryProvenance -> {
+                        query.andWhere {
+                            table.canonicalPath eq provenance.canonicalPath.toString()
+                        }
+                    }
                 }
 
                 // Use the provided provenance for the result instead of building it from the stored values, because in
@@ -158,6 +165,10 @@ class ProvenanceBasedPostgresStorage(
                             it[vcsUrl] = provenance.vcsInfo.url
                             it[vcsRevision] = provenance.resolvedRevision
                         }
+
+                        is DirectoryProvenance -> {
+                            it[canonicalPath] = provenance.canonicalPath.toString()
+                        }
                     }
 
                     it[scannerName] = scanResult.scanner.name
@@ -195,6 +206,7 @@ private class ProvenanceScanResults(tableName: String) : IntIdTable(tableName) {
     val scannerVersion = text("scanner_version")
     val scannerConfiguration = text("scanner_configuration")
     val scanSummary = jsonb<ScanSummary>("scan_summary")
+    val canonicalPath = text("canonical_path")
 
     init {
         // Indices to prevent duplicate entries.
