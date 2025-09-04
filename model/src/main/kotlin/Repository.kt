@@ -31,7 +31,7 @@ data class Repository(
     /**
      * Provenance wrapper for original VCS information, if present.
      */
-    val provenance: RemoteProvenance,
+    val provenance: KnownProvenance,
 
     /**
      * Original VCS-related information from the working tree containing the analyzer root.
