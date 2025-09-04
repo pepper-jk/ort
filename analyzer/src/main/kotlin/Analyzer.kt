@@ -40,9 +40,12 @@ import org.ossreviewtoolkit.analyzer.PackageManager.Companion.includes
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
+import org.ossreviewtoolkit.model.DirectoryProvenance
+import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Repository
 import org.ossreviewtoolkit.model.RepositoryProvenance
+import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
@@ -149,7 +152,13 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
             // Only include nested VCS if they are part of the analyzed directory.
             workingTree.getRootPath().resolve(path).startsWith(info.absoluteProjectPath)
         }.orEmpty()
-        val provenance = RepositoryProvenance(vcs, vcs.revision)
+
+        val provenance: KnownProvenance = if (vcs == VcsInfo.EMPTY) {
+            DirectoryProvenance(canonicalPath = info.absoluteProjectPath)
+        } else {
+            RepositoryProvenance(vcsInfo = vcs, resolvedRevision = vcs.revision)
+        }
+
         val repository = Repository(
             provenance = provenance,
             nestedRepositories = nestedVcs,
