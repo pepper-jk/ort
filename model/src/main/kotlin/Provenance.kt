@@ -77,10 +77,6 @@ data class RepositoryProvenance(
      */
     val resolvedRevision: String
 ) : RemoteProvenance {
-    init {
-        require(resolvedRevision.isNotBlank()) { "The resolved revision must not be blank." }
-    }
-
     /**
      * Return true if this provenance matches the processed VCS information of the [package][pkg].
      */
