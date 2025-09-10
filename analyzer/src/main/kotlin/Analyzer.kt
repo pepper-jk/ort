@@ -153,7 +153,7 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
             workingTree.getRootPath().resolve(path).startsWith(info.absoluteProjectPath)
         }.orEmpty()
 
-        val provenance: KnownProvenance = if (vcs == VcsInfo.EMPTY) {
+        val provenance: KnownProvenance = if (vcs == VcsInfo.EMPTY || vcs.revision == "") {
             DirectoryProvenance(canonicalPath = info.absoluteProjectPath)
         } else {
             RepositoryProvenance(vcsInfo = vcs, resolvedRevision = vcs.revision)
